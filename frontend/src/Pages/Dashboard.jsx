@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from "../components/LeftSidebar.jsx"
 import DashboardDetails from './DashboardDetails'
-import Thirdyrboys from './Room.jsx'
+import Room from './Room.jsx'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -25,16 +25,21 @@ function Dashboard() {
   }
 
   const renderContent = () => {
-    switch (activePage) {
-      case "dashboard": return <DashboardDetails />
-      case "4th": return <h2>4th Year Boys Hostel</h2>
-      case "3rd": return <Thirdyrboys />
-      case "2nd": return <h2>2nd Year Boys Hostel</h2>
-      case "1st": return <h2>1st Year Boys Hostel</h2>
-      case "pharmacy": return <h2>Pharmacy Hostel</h2>
-      default: return <h2>Welcome</h2>
-    }
+  switch (activePage) {
+    case "dashboard":
+      return <DashboardDetails />
+
+    case "4th":
+    case "3rd":
+    case "2nd":
+    case "1st":
+    case "pharmacy":
+      return <Room year={activePage} /> 
+
+    default:
+      return <h2>Welcome</h2>
   }
+}
 
   return (
     <div className="d-flex flex-column" style={{ height: "100vh", overflow: "hidden" }}>

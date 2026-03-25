@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   loginAdmin,
   getDashboard,
-  getThirdYearRooms,
+  getRoomsByYear,
   generateQR
 } = require("../controllers/adminController");
 
@@ -13,7 +13,9 @@ const authenticateToken = require("../middleware/authMiddleware");
 router.post("/admin-login", loginAdmin);
 
 router.get("/admin/dashboard", authenticateToken, getDashboard);
-router.get("/admin/dashboard/third", authenticateToken, getThirdYearRooms);
+
+// ✅ dynamic route
+router.get("/admin/dashboard/:year", authenticateToken, getRoomsByYear);
 
 router.get("/admin/qr/:roomNo", authenticateToken, generateQR);
 

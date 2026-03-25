@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react'
 import axios from '../api/axios'
 
-function Room() {
+function Room({ year }) {
   const [rooms, setRooms] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setLoading(true)
     fetchRooms()
-  }, [])
+  }, [year])
 
   const fetchRooms = async () => {
     try {
-      const res = await axios.get('/admin/dashboard/third')
+      const res = await axios.get(`/admin/dashboard/${year}`)
       setRooms(res.data)
     } catch (err) {
       console.log(err)
@@ -42,7 +43,9 @@ function Room() {
   return (
     <div className="container-fluid py-3">
 
-      <h3 className="mb-4 text-center text-md-start">3rd Year Rooms(300 to 330)</h3>
+      <h3 className="mb-4 text-center text-md-start text-capitalize">
+        {year} Year Hostel
+      </h3>
 
       <div className="row g-3">
 
@@ -51,9 +54,8 @@ function Room() {
 
             <div className="card shadow h-100">
 
-              {/* Room Header */}
-              <div className="card-header d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">Room {room["Room No"]}</h5>
+              <div className="card-header d-flex justify-content-between">
+                <h5>Room {room["Room No"]}</h5>
 
                 <button
                   className="btn btn-sm btn-success"
@@ -63,45 +65,36 @@ function Room() {
                 </button>
               </div>
 
-              {/* Students */}
               <div className="card-body">
 
-                {room.students && room.students.length > 0 ? (
-                  room.students.map((student, i) => (
-                    <div key={i} className="border rounded p-2 mb-2">
+                {room.students.map((student, i) => (
+                  <div key={i} className="border rounded p-2 mb-2">
 
-                      <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center">
 
-                        {/* ✅ Image */}
-                        <img
-                          src={student.photo || "https://ui-avatars.com/api/?name=Student"}
-                          alt="student"
-                          className="rounded-circle me-2"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            objectFit: "cover"
-                          }}
-                          onError={(e) => {
-                            e.target.src = "https://ui-avatars.com/api/?name=Student";
-                          }}
-                        />
+                      <img
+                        src={student.photo || "https://ui-avatars.com/api/?name=Student"}
+                        alt="student"
+                        className="me-2"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                          borderRadius: "8px" // ✅ square
+                        }}
+                      />
 
-                        {/* Details */}
-                        <div>
-                          <strong>{student.name}</strong><br />
-                          <small>Regd: {student.regd}</small><br />
-                          <small>Branch: {student.branch}</small><br />
-                          <small>Mobile: {student.mobile}</small>
-                        </div>
-
+                      <div>
+                        <strong>{student.name}</strong><br />
+                        <small>Regd: {student.regd}</small><br />
+                        <small>Branch: {student.branch}</small><br />
+                        <small>Mobile: {student.mobile}</small>
                       </div>
 
                     </div>
-                  ))
-                ) : (
-                  <p className="text-muted text-center">No students found</p>
-                )}
+
+                  </div>
+                ))}
 
               </div>
 
