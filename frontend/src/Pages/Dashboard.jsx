@@ -1,0 +1,82 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Sidebar from "../components/LeftSidebar.jsx"
+import DashboardDetails from './DashboardDetails'
+import Thirdyrboys from './Room.jsx'
+
+function Dashboard() {
+  const navigate = useNavigate()
+  const [activePage, setActivePage] = useState("dashboard")
+  const [showSidebar, setShowSidebar] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) navigate('/login')
+  }, [])
+
+  const handlePageClick = (page) => {
+    setActivePage(page)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    navigate('/login')
+  }
+
+  const renderContent = () => {
+    switch (activePage) {
+      case "dashboard": return <DashboardDetails />
+      case "4th": return <h2>4th Year Boys Hostel</h2>
+      case "3rd": return <Thirdyrboys />
+      case "2nd": return <h2>2nd Year Boys Hostel</h2>
+      case "1st": return <h2>1st Year Boys Hostel</h2>
+      case "pharmacy": return <h2>Pharmacy Hostel</h2>
+      default: return <h2>Welcome</h2>
+    }
+  }
+
+  return (
+    <div className="d-flex flex-column" style={{ height: "100vh", overflow: "hidden" }}>
+
+      {/* Mobile Top Bar */}
+      <div className="bg-dark text-white p-2 d-flex align-items-center d-md-none">
+        <button
+          className="btn btn-outline-light me-2"
+          onClick={() => setShowSidebar(true)}
+        >
+          <i className="bi bi-list"></i>
+        </button>
+        <span className="fw-bold">Dashboard</span>
+      </div>
+
+      <div className="d-flex flex-grow-1 overflow-hidden">
+
+        {/* Sidebar */}
+        <Sidebar
+          activePage={activePage}
+          handlePageClick={handlePageClick}
+          handleLogout={handleLogout}
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
+        />
+
+        {/* ✅ RIGHT CONTENT SCROLL ONLY */}
+        <div
+          className="flex-grow-1 bg-light"
+          style={{
+            overflowY: "auto",
+            height: "100%"
+          }}
+        >
+          <div className="p-3 p-md-4">
+            {renderContent()}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
+export default Dashboard

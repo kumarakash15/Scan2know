@@ -1,0 +1,39 @@
+html, body, #root {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;
+}
+/* Mobile sidebar animation */
+.mobile-hide {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  height: 100%;
+  z-index: 999;
+  transition: 0.3s;
+}
+
+.mobile-show {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 999;
+  transition: 0.3s;
+}
+
+/* Desktop fix */
+@media (min-width: 768px) {
+  .mobile-hide,
+  .mobile-show {
+    position: static;
+    left: 0;
+  }
+}
