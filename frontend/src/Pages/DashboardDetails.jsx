@@ -12,7 +12,7 @@ function DashboardDetails() {
   const fetchData = async () => {
     try {
       const res = await axios.get('/admin/dashboard')
-      setData(res.data)
+      setData(res.data || [])
     } catch (err) {
       console.log(err)
     } finally {
@@ -24,10 +24,12 @@ function DashboardDetails() {
 
   const totalStudents = data.reduce((acc, item) => {
     let count = 0
+
     if (item["Student 1 Name"]) count++
     if (item["Student 2 Name"]) count++
     if (item["Student 3 Name"]) count++
     if (item["Student 4 Name"]) count++
+
     return acc + count
   }, 0)
 

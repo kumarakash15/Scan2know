@@ -25,8 +25,16 @@ exports.loginAdmin = (req, res) => {
 // 📊 DASHBOARD
 exports.getDashboard = async (req, res, next) => {
   try {
-    const response = await axios.get(process.env.MAINHOSTEL_3RD);
-    res.json(response.data);
+    const urls = [
+      process.env.MAINHOSTEL_1ST,
+      process.env.MAINHOSTEL_2ND,
+      process.env.MAINHOSTEL_3RD,
+      process.env.MAINHOSTEL_4TH,
+      process.env.MAINHOSTEL_PHARMACY
+    ];
+    const responses = await Promise.all(urls.map(url => axios.get(url)));
+    const allData = responses.flatMap(res => res.data);
+    res.json(allData);
   } catch (err) {
     next(err);
   }
