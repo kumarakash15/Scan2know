@@ -18,12 +18,13 @@ function Sidebar({ activePage, handlePageClick, handleLogout, showSidebar, setSh
       {/* Sidebar */}
       <div
         className={`
-          bg-dark text-white
-          ${showSidebar ? 'mobile-show' : 'mobile-hide'}
-        `}
+    bg-dark text-white
+    ${showSidebar ? 'mobile-show' : 'mobile-hide'}
+  `}
         style={{
           width: '250px',
-          minHeight: '100vh'
+          height: '100vh',
+          overflow: 'visible' // ❌ no scroll inside sidebar
         }}
       >
         <div className="p-4">
@@ -43,9 +44,8 @@ function Sidebar({ activePage, handlePageClick, handleLogout, showSidebar, setSh
             {/* Dashboard */}
             <li className="nav-item">
               <button
-                className={`nav-link text-start w-100 ${
-                  activePage === "dashboard" ? "active" : "text-white"
-                }`}
+                className={`nav-link text-start w-100 ${activePage === "dashboard" ? "active" : "text-white"
+                  }`}
                 onClick={() => {
                   handlePageClick("dashboard")
                   setShowSidebar(false)
@@ -79,7 +79,7 @@ function Sidebar({ activePage, handlePageClick, handleLogout, showSidebar, setSh
                         }}
                       >
                         {year === "pharmacy"
-                          ? "Pharmacy (1st Year)"
+                          ? "Pharmacy"
                           : `${year} Year Boys`}
                       </button>
                     </li>

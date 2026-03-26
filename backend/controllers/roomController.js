@@ -28,6 +28,11 @@ exports.getRoomDetails = async (req, res) => {
               item[`Student ${num} Mobile number`] ||
               item[`Student ${num} Mobile No`] ||
               "N/A",
+
+            parentMobile:
+              item[`Student ${num} Parents Mobile number`] ||
+              item[`Student ${num} Parents Mobile No`] ||
+              "N/A",
             photo: formatDriveLink(
               item[`Student ${num} photo`] ||
               item[`Student ${num} Photo`]

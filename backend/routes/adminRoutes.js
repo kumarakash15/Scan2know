@@ -5,7 +5,8 @@ const {
   loginAdmin,
   getDashboard,
   getRoomsByYear,
-  generateQR
+  generateQR,
+  getImage
 } = require("../controllers/adminController");
 
 const authenticateToken = require("../middleware/authMiddleware");
@@ -13,7 +14,7 @@ const authenticateToken = require("../middleware/authMiddleware");
 router.post("/admin-login", loginAdmin);
 
 router.get("/admin/dashboard", authenticateToken, getDashboard);
-
+router.get("/image/:id", getImage);
 // ✅ dynamic route
 router.get("/admin/dashboard/:year", authenticateToken, getRoomsByYear);
 

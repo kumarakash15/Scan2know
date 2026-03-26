@@ -1,12 +1,13 @@
 const axios = require("axios");
 const QRCode = require("qrcode");
 const jwt = require("jsonwebtoken");
+const sharp = require('sharp');
+const path = require('path');
 const formatDriveLink = require("../utils/formatDriveLink");
 
 // 🔐 LOGIN
 exports.loginAdmin = (req, res) => {
   const { username, password } = req.body;
-
   if (
     username === process.env.ADMIN_USER &&
     password === process.env.ADMIN_PASS
@@ -16,10 +17,8 @@ exports.loginAdmin = (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );
-
     return res.json({ success: true, token });
   }
-
   res.status(401).json({ success: false, message: "Invalid credentials" });
 };
 
@@ -30,6 +29,28 @@ exports.getDashboard = async (req, res, next) => {
     res.json(response.data);
   } catch (err) {
     next(err);
+  }
+};
+
+exports.getImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const url = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+
+    const response = await axios.get(url, {
+      responseType: "arraybuffer",
+    });
+    const contentType = response.headers["content-type"];
+
+    res.set("Content-Type", contentType);
+    res.set("Cache-Control", "public, max-age=86400");
+
+    res.send(response.data);
+
+  } catch (err) {
+    console.error("Image fetch error:", err.message);
+    res.status(500).send("Image load failed");
   }
 };
 
@@ -70,6 +91,11 @@ exports.getRoomsByYear = async (req, res, next) => {
               item[`Student ${num} Mobile number`] ||
               item[`Student ${num} Mobile No`] ||
               "N/A",
+
+            parentMobile:
+              item[`Student ${num} Parents Mobile number`] ||
+              item[`Student ${num} Parents Mobile No`] ||
+              "N/A",
             photo: formatDriveLink(
               item[`Student ${num} photo`] ||
               item[`Student ${num} Photo`]
@@ -91,17 +117,106 @@ exports.getRoomsByYear = async (req, res, next) => {
 exports.generateQR = async (req, res, next) => {
   try {
     const roomNo = req.params.roomNo;
-
     const url = `${process.env.FRONTEND_URL}/show/${roomNo}`;
-    const qr = await QRCode.toBuffer(url);
+
+    // 📱 Generate QR with HIGH error correction
+    const qrSize = 400;
+
+    const qrBuffer = await QRCode.toBuffer(url, {
+      width: qrSize,
+      margin: 2,
+      errorCorrectionLevel: 'H', // 🔥 IMPORTANT
+    });
+
+    // 🏷️ Load & resize logo
+    const logoPath = path.join(__dirname, '../assets/eatmlogo.png');
+
+    const logoSize = 80;
+
+    const logo = await sharp(logoPath)
+      .resize(logoSize, logoSize)
+      .toBuffer();
+
+    // 🧠 Canvas size
+    const canvasWidth = 600;
+    const canvasHeight = 700;
+
+    // 📍 Center positions
+    const qrLeft = (canvasWidth - qrSize) / 2;
+    const qrTop = 120;
+
+    const logoLeft = qrLeft + (qrSize - logoSize) / 2;
+    const logoTop = qrTop + (qrSize - logoSize) / 2;
+
+    const finalImage = await sharp({
+      create: {
+        width: canvasWidth,
+        height: canvasHeight,
+        channels: 4,
+        background: '#ffffff',
+      },
+    })
+      .composite([
+
+        // 🔼 Top Title
+        {
+          input: Buffer.from(`
+            <svg width="600" height="40">
+              <style>
+                .title { font-size: 32px; font-weight: bold; fill: black; }
+              </style>
+              <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="title">
+                Room ${roomNo}
+              </text>
+            </svg>
+          `),
+          top: 20,
+          left: 0,
+        },
+
+        // 📱 QR
+        {
+          input: qrBuffer,
+          top: qrTop,
+          left: qrLeft,
+        },
+
+        // 🏷️ Logo (perfect center)
+        {
+          input: logo,
+          top: logoTop,
+          left: logoLeft,
+        },
+
+        // 🔽 Bottom Text
+        {
+          input: Buffer.from(`
+            <svg width="600" height="40">
+              <style>
+                .subtitle { font-size: 20px; fill: black; }
+              </style>
+              <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="subtitle">
+                Scan to know the details of room members
+              </text>
+            </svg>
+          `),
+          top: 580,
+          left: 0,
+        },
+
+      ])
+      .png()
+      .toBuffer();
 
     res.set({
       "Content-Type": "image/png",
       "Content-Disposition": `attachment; filename=room-${roomNo}.png`,
     });
 
-    res.send(qr);
+    res.send(finalImage);
+
   } catch (err) {
+    console.error(err);
     next(err);
   }
 };

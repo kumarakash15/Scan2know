@@ -14,8 +14,9 @@ footer {
 .mobile-hide {
   position: fixed;
   top: 0;
-  left: -260px;
+  left: -250px;
   height: 100%;
+  width: 250px;
   z-index: 999;
   transition: 0.3s;
 }
@@ -25,15 +26,18 @@ footer {
   top: 0;
   left: 0;
   height: 100%;
+  width: 250px;
   z-index: 999;
   transition: 0.3s;
 }
 
-/* Desktop fix */
+/* ✅ Desktop FIXED sidebar */
 @media (min-width: 768px) {
   .mobile-hide,
   .mobile-show {
-    position: static;
+    position: relative;   /* NOT static */
     left: 0;
+    width: 250px;
+    flex-shrink: 0;       /* 🔥 prevents shrinking */
   }
 }

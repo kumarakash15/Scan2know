@@ -44,7 +44,7 @@ function Room({ year }) {
     <div className="container-fluid py-3">
 
       <h3 className="mb-4 text-center text-md-start text-capitalize">
-        {year} Year Hostel
+        {year} Year Boys
       </h3>
 
       <div className="row g-3">
@@ -88,7 +88,8 @@ function Room({ year }) {
                         <strong>{student.name}</strong><br />
                         <small>Regd: {student.regd}</small><br />
                         <small>Branch: {student.branch}</small><br />
-                        <small>Mobile: {student.mobile}</small>
+                        <small>Student Mobile Number: {student.mobile}</small><br />
+                        <small>Parent Mobile Number: {student.parentMobile}</small>
                       </div>
 
                     </div>

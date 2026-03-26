@@ -10,7 +10,10 @@ function formatDriveLink(link) {
 
     const fileId = match[1];
 
-    return `https://lh3.googleusercontent.com/d/${fileId}`;
+    const baseUrl = process.env.BACKEND_URL || "http://localhost:5000";
+
+    return `${baseUrl}/image/${fileId}`;
+
   } catch (err) {
     return "";
   }

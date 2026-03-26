@@ -1,26 +1,20 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 import logo from '../assets/eatmlogo.png'
 
 function Navbar() {
   const navigate = useNavigate()
   const [showMenu, setShowMenu] = useState(false)
 
-  const token = localStorage.getItem('token')
-  const username = localStorage.getItem('username')
-
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('username')
-    navigate('/login')
-  }
+  const { user, token, logout } = useAuth()
 
   return (
     <nav className="navbar navbar-light bg-light px-3 sticky-top shadow-sm">
 
       <div className="container d-flex justify-content-between align-items-center">
 
-        {/* Left side */}
+        {/* Left */}
         <div className="d-flex align-items-center">
           <img
             src={logo}
@@ -30,16 +24,14 @@ function Navbar() {
           <span className="fw-bold fs-5">Eatm Hostel</span>
         </div>
 
-        {/* Right side */}
+        {/* Right */}
         <div className="position-relative">
 
           {!token ? (
-            // 🔓 Login Button
             <Link to="/login" className="btn btn-primary">
               Login
             </Link>
           ) : (
-            // 🔐 User Menu
             <div
               onMouseEnter={() => setShowMenu(true)}
               onMouseLeave={() => setShowMenu(false)}
@@ -57,16 +49,17 @@ function Navbar() {
                     zIndex: 1000
                   }}
                 >
-                  <p className="mb-2 fw-bold text-center">{username}</p>
+                  <p className="mb-2 fw-bold text-center">{user}</p>
 
                   <button
                     className="btn btn-sm btn-danger w-100"
-                    onClick={handleLogout}
+                    onClick={logout}
                   >
                     Logout
                   </button>
                 </div>
               )}
+
             </div>
           )}
 

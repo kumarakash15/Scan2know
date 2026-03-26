@@ -69,7 +69,8 @@ function Show() {
               <h5>{student.name}</h5>
               <p className="mb-1"><strong>Regd:</strong> {student.regd}</p>
               <p className="mb-1"><strong>Branch:</strong> {student.branch}</p>
-              <p className="mb-0"><strong>Mobile:</strong> {student.mobile}</p>
+              <p className="mb-0"><strong>Student Mobile Number:</strong> {student.mobile}</p>
+              <p className="mb-0"><strong>Parent Mobile Number:</strong> {student.parentMobile}</p>
 
             </div>
 

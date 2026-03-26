@@ -25,24 +25,24 @@ function Dashboard() {
   }
 
   const renderContent = () => {
-  switch (activePage) {
-    case "dashboard":
-      return <DashboardDetails />
+    switch (activePage) {
+      case "dashboard":
+        return <DashboardDetails />
 
-    case "4th":
-    case "3rd":
-    case "2nd":
-    case "1st":
-    case "pharmacy":
-      return <Room year={activePage} /> 
+      case "4th":
+      case "3rd":
+      case "2nd":
+      case "1st":
+      case "pharmacy":
+        return <Room year={activePage} />
 
-    default:
-      return <h2>Welcome</h2>
+      default:
+        return <h2>Welcome</h2>
+    }
   }
-}
 
   return (
-    <div className="d-flex flex-column" style={{ height: "100vh", overflow: "hidden" }}>
+    <div className="d-flex flex-column">
 
       {/* Mobile Top Bar */}
       <div className="bg-dark text-white p-2 d-flex align-items-center d-md-none">
@@ -55,7 +55,7 @@ function Dashboard() {
         <span className="fw-bold">Dashboard</span>
       </div>
 
-      <div className="d-flex flex-grow-1 overflow-hidden">
+      <div className="d-flex flex-grow-1">
 
         {/* Sidebar */}
         <Sidebar
@@ -66,12 +66,12 @@ function Dashboard() {
           setShowSidebar={setShowSidebar}
         />
 
-        {/* ✅ RIGHT CONTENT SCROLL ONLY */}
+        {/* RIGHT CONTENT */}
         <div
-          className="flex-grow-1 bg-light"
+          className="flex-grow-1 bg-light hide-scrollbar"
           style={{
-            overflowY: "auto",
-            height: "100%"
+            maxHeight: "100vh",
+            overflowY: "auto"
           }}
         >
           <div className="p-3 p-md-4">
