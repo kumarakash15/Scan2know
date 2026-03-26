@@ -14,19 +14,14 @@ function Show() {
 
   const fetchRoom = async () => {
     try {
-      const res = await axios.get(`/room/${roomNo}`)
-
-      if (res.data.length > 0) {
-        setRoom(res.data[0])
-      } else {
-        setRoom(null)
-      }
+      const res = await axios.get(`/room/${roomNo}`);
+      setRoom(res.data); // ✅ direct object
     } catch (err) {
-      console.log(err)
+      setRoom(null);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (loading) {
     return <h5 className="text-center mt-4">Loading...</h5>

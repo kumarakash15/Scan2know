@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import hostel from "../assets/hostel.jpg"
 
 function Index() {
   const navigate = useNavigate()
@@ -14,31 +15,50 @@ function Index() {
   return (
     <div className="container py-5">
 
-      <div className="row justify-content-center text-center">
+      <div className="row align-items-center">
 
-        <div className="col-12 col-md-10 col-lg-8">
+        {/* Left Side - Image */}
+        <div className="col-md-6 mb-4 mb-md-0 text-center">
+          <img
+            src={hostel}
+            alt="hostel"
+            className="img-fluid rounded shadow"
+            style={{ maxHeight: "800px", objectFit: "cover" }}
+          />
+        </div>
+
+        {/* Right Side - Content */}
+        <div className="col-md-6 text-center text-md-start">
 
           {/* Title */}
           <h1 className="fw-bold mb-3 display-5">
-            Eatm Hostel Management System
+            Scan2Know
           </h1>
 
-          {/* College Name */}
+          {/* Subtitle */}
           <h4 className="text-muted mb-4">
-            Einstein Academy of Technology and Management
+            Smart Room Member Information System
           </h4>
 
           {/* Description */}
           <p className="lead mb-3">
-            Welcome to the Eatm Hostel Management System — a smart and efficient
-            platform designed to simplify hostel operations.
+            Scan2Know is a simple and smart solution to instantly access
+            room member details using a quick scan.
           </p>
 
           <p className="mb-4">
-            From managing student records to tracking room allocations,
-            everything is handled in one place. Stay connected, organized,
-            and informed with ease.
+            Just scan and get complete information about occupants —
+            making identification, management, and record tracking fast,
+            easy, and efficient.
           </p>
+
+          {/* Button */}
+          <button
+            className="btn btn-primary px-4"
+            onClick={() => navigate('/login')}
+          >
+            Get Started
+          </button>
 
         </div>
 

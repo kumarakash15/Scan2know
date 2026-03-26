@@ -15,7 +15,17 @@ function Navbar() {
       <div className="container d-flex justify-content-between align-items-center">
 
         {/* Left */}
-        <div className="d-flex align-items-center">
+        <div
+          className="d-flex align-items-center"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            if (token) {
+              navigate("/dashboard")
+            } else {
+              navigate("/")
+            }
+          }}
+        >
           <img
             src={logo}
             alt="logo"
