@@ -11,13 +11,14 @@ function Footer() {
             <p className="mb-1">
               Einstein Academy of Technology and Management
             </p>
-            <small>Smart hostel management system</small>
+            <small>Smart Room Member Information System</small>
           </div>
 
           {/* Right Section */}
           <div className="col-12 col-md-6 mb-3 text-md-end">
             <p className="mb-1">Developed by TechVortex</p>
-            <small>Making hostel life simpler & smarter</small>
+            <small>Scan2Know is a simple and smart solution to instantly access
+            room member details using a quick scan.</small>
           </div>
 
         </div>
