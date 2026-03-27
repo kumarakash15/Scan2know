@@ -77,46 +77,57 @@ exports.getRoomsByYear = async (req, res, next) => {
 
     const selectedUrl = urls[year];
 
-
     if (!selectedUrl) {
       return res.status(400).json({ message: "Invalid year" });
     }
 
     const response = await axios.get(selectedUrl);
 
-    const formatted = response.data.map(item => ({
-      "Room No": item["Room No"],
-      students: [1, 2, 3, 4]
-        .map(num => {
-          const name = item[`Student ${num} Name`];
-          if (!name || name.trim() === "") return null;
+    const formatted = response.data.map(item => {
+      
+      // 🔥 Get all student keys dynamically
+      const studentNumbers = Object.keys(item)
+        .filter(key => key.includes("Student") && key.includes("Name"))
+        .map(key => parseInt(key.match(/\d+/)[0]));
 
-          return {
-            name,
-            regd: item[`Student ${num} Regd`] || "N/A",
-            branch: item[`Student ${num} Branch`] || "N/A",
-            mobile:
-              item[`Student ${num} Mobile number`] ||
-              item[`Student ${num} Mobile No`] ||
-              "N/A",
+      const students = studentNumbers.map(num => {
+        const name = item[`Student ${num} Name`];
+        if (!name || name.trim() === "") return null;
 
-            parentMobile:
-              item[`Student ${num} Parents Mobile number`] ||
-              item[`Student ${num} Parents Mobile No`] ||
-              "N/A",
-            photo: formatDriveLink(
-              item[`Student ${num} photo`] ||
-              item[`Student ${num} Photo`]
-            )
-          };
-        })
-        .filter(Boolean)
-    }));
+        return {
+          name,
+          regd: item[`Student ${num} Regd`] || "N/A",
+          branch: item[`Student ${num} Branch`] || "N/A",
+
+          mobile:
+            item[`Student ${num} Mobile number`] ||
+            item[`Student ${num} Mobile No`] ||
+            item[`Student ${num} Mobile Number`] ||
+            "N/A",
+
+          parentMobile:
+            item[`Student ${num} Parents Mobile number`] ||
+            item[`Student ${num} Parents Mobile No`] ||
+            item[`Student ${num} Parents Mobile Number`] ||
+            "N/A",
+
+          photo: formatDriveLink(
+            item[`Student ${num} photo`] ||
+            item[`Student ${num} Photo`]
+          )
+        };
+      }).filter(Boolean);
+
+      return {
+        "Room No": item["Room No"],
+        students
+      };
+    });
 
     res.json(formatted);
 
   } catch (err) {
-    console.error("YEAR API ERROR:", err.message); // 🔥 SEE ERROR
+    console.error("YEAR API ERROR:", err.message);
     res.status(500).json({ message: "Failed to fetch data" });
   }
 };
@@ -165,19 +176,17 @@ exports.generateQR = async (req, res, next) => {
       },
     })
       .composite([
-
-        // 🔼 Top Title
         {
           input: Buffer.from(`
-            <svg width="600" height="40">
-              <style>
-                .title { font-size: 32px; font-weight: bold; fill: black; }
-              </style>
-              <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="title">
-                Room ${roomNo}
-              </text>
-            </svg>
-          `),
+      <svg width="600" height="20">
+        <style>
+          .title { font-size: 32px; font-weight: bold; fill: black; }
+        </style>
+        <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="title">
+          Room ${roomNo}
+        </text>
+      </svg>
+    `),
           top: 20,
           left: 0,
         },
@@ -189,27 +198,11 @@ exports.generateQR = async (req, res, next) => {
           left: qrLeft,
         },
 
-        // 🏷️ Logo (perfect center)
+        // 🏷️ Logo
         {
           input: logo,
           top: logoTop,
           left: logoLeft,
-        },
-
-        // 🔽 Bottom Text
-        {
-          input: Buffer.from(`
-            <svg width="600" height="40">
-              <style>
-                .subtitle { font-size: 20px; fill: black; }
-              </style>
-              <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="subtitle">
-                Scan to know the details of room members
-              </text>
-            </svg>
-          `),
-          top: 580,
-          left: 0,
         },
 
       ])
