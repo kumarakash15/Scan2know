@@ -143,14 +143,14 @@ exports.generateQR = async (req, res, next) => {
 
     const qrBuffer = await QRCode.toBuffer(url, {
       width: qrSize,
-      margin: 2,
+      margin: 0,
       errorCorrectionLevel: 'H', // 🔥 IMPORTANT
     });
 
     // 🏷️ Load & resize logo
     const logoPath = path.join(__dirname, '../assets/eatmlogo.png');
 
-    const logoSize = 80;
+    const logoSize = 100;
 
     const logo = await sharp(logoPath)
       .resize(logoSize, logoSize)
@@ -158,11 +158,11 @@ exports.generateQR = async (req, res, next) => {
 
     // 🧠 Canvas size
     const canvasWidth = 600;
-    const canvasHeight = 700;
+    const canvasHeight = 520;
 
     // 📍 Center positions
     const qrLeft = (canvasWidth - qrSize) / 2;
-    const qrTop = 120;
+    const qrTop = 60;
 
     const logoLeft = qrLeft + (qrSize - logoSize) / 2;
     const logoTop = qrTop + (qrSize - logoSize) / 2;
@@ -178,7 +178,7 @@ exports.generateQR = async (req, res, next) => {
       .composite([
         {
           input: Buffer.from(`
-      <svg width="600" height="20">
+      <svg width="600" height="40">
         <style>
           .title { font-size: 32px; font-weight: bold; fill: black; }
         </style>
