@@ -33,7 +33,48 @@ function DashboardDetails() {
     return acc + count
   }, 0)
 
-  if (loading) return <h5>Loading...</h5>
+  if (loading) {
+    return (
+      <div className="container-fluid">
+        <div className="row g-3">
+
+          <div className="col-md-4">
+            <div className="card p-4 shadow">
+              <h5 className="placeholder-glow">
+                <span className="placeholder col-6"></span>
+              </h5>
+              <h2 className="placeholder-glow">
+                <span className="placeholder col-4"></span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="card p-4 shadow placeholder-wave">
+              <h5 className="placeholder-glow">
+                <span className="placeholder col-6"></span>
+              </h5>
+              <h2 className="placeholder-glow">
+                <span className="placeholder col-4"></span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="card p-4 shadow placeholder-wave">
+              <h5 className="placeholder-glow">
+                <span className="placeholder col-6"></span>
+              </h5>
+              <h2 className="placeholder-glow">
+                <span className="placeholder col-4"></span>
+              </h2>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container-fluid">

@@ -6,19 +6,22 @@ import { useAuth } from '../context/AuthContext'
 function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
+  const navigate = useNavigate()
   const { login, token } = useAuth()
 
-  // ✅ Auto redirect if already logged in
   useEffect(() => {
     if (token) {
       navigate('/dashboard')
     }
-  }, [token])
+  }, [token, navigate])
 
   const handleLogin = async (e) => {
     e.preventDefault()
+
+    setLoading(true)
 
     try {
       const res = await axios.post('/admin-login', {
@@ -27,13 +30,13 @@ function Login() {
       })
 
       if (res.data.success) {
-        // ✅ Use AuthContext
         login(username, res.data.token)
-
         navigate('/dashboard')
       }
     } catch (err) {
       alert('Invalid username or password ❌')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -54,23 +57,52 @@ function Login() {
                   className="form-control"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  disabled={loading}
                   required
                 />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={loading}
+                  >
+                    <i className={`bi ${showPassword ? "bi-eye-slash-fill" : "bi-eye-fill"}`}></i>
+                  </button>
+                </div>
               </div>
 
-              <button type="submit" className="btn btn-primary w-100">
-                Login
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    Login Processing...
+                  </>
+                ) : (
+                  'Login'
+                )}
               </button>
 
             </form>

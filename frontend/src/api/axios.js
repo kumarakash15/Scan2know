@@ -1,11 +1,9 @@
 import axios from "axios"
 
-// 🌐 Create instance
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
 })
 
-// 🔐 REQUEST INTERCEPTOR (Attach Token)
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token")
@@ -19,7 +17,6 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// 🌐 RESPONSE INTERCEPTOR (Global Error Handling)
 instance.interceptors.response.use(
   (response) => response,
 
@@ -28,7 +25,6 @@ instance.interceptors.response.use(
 
     console.error("API ERROR:", error.response || error.message)
 
-    // 🔐 Auth errors
     if (status === 401 || status === 403) {
       localStorage.removeItem("token")
       localStorage.removeItem("username")

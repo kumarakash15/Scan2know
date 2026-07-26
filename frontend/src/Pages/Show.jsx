@@ -24,7 +24,59 @@ function Show() {
   };
 
   if (loading) {
-    return <h5 className="text-center mt-4">Loading...</h5>
+    return (
+      <div className="container py-4">
+
+        <h3 className="text-center mb-4 placeholder-glow">
+          <span className="placeholder col-3"></span>
+        </h3>
+
+        <div className="row g-3">
+
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="col-12 col-sm-6 col-md-4">
+
+              <div className="card shadow h-100 text-center p-3 placeholder-wave">
+                <span
+                  className="placeholder rounded-circle mx-auto mb-3"
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    display: "block"
+                  }}
+                ></span>
+
+                {/* Name */}
+                <div className="placeholder-glow mb-3">
+                  <span className="placeholder col-6"></span>
+                </div>
+
+                {/* Details */}
+                <div className="placeholder-glow mb-2">
+                  <span className="placeholder col-8"></span>
+                </div>
+
+                <div className="placeholder-glow mb-2">
+                  <span className="placeholder col-7"></span>
+                </div>
+
+                <div className="placeholder-glow mb-2">
+                  <span className="placeholder col-9"></span>
+                </div>
+
+                <div className="placeholder-glow">
+                  <span className="placeholder col-8"></span>
+                </div>
+
+              </div>
+
+            </div>
+          ))}
+
+        </div>
+
+      </div>
+    )
   }
 
   if (!room) {

@@ -38,7 +38,83 @@ function Room({ year }) {
     }
   }
 
-  if (loading) return <h5 className="text-center mt-4">Loading rooms...</h5>
+  if (loading) {
+  return (
+    <div className="container-fluid py-3">
+
+      <h3 className="mb-4 placeholder-glow">
+        <span className="placeholder col-3"></span>
+      </h3>
+
+      <div className="row g-3">
+
+        {[...Array(6)].map((_, index) => (
+          <div key={index} className="col-12 col-sm-6 col-lg-4">
+
+            <div className="card shadow h-100 placeholder-wave">
+
+              <div className="card-header d-flex justify-content-between align-items-center">
+                <span className="placeholder col-4"></span>
+                <span
+                  className="placeholder rounded"
+                  style={{ width: "50px", height: "30px" }}
+                ></span>
+              </div>
+
+              <div className="card-body">
+
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="border rounded p-2 mb-2">
+
+                    <div className="d-flex align-items-center">
+
+                      <span
+                        className="placeholder rounded me-3"
+                        style={{
+                          width: "50px",
+                          height: "50px"
+                        }}
+                      ></span>
+
+                      <div className="w-100">
+                        <div className="placeholder-glow mb-2">
+                          <span className="placeholder col-6"></span>
+                        </div>
+
+                        <div className="placeholder-glow mb-1">
+                          <span className="placeholder col-8"></span>
+                        </div>
+
+                        <div className="placeholder-glow mb-1">
+                          <span className="placeholder col-7"></span>
+                        </div>
+
+                        <div className="placeholder-glow mb-1">
+                          <span className="placeholder col-9"></span>
+                        </div>
+
+                        <div className="placeholder-glow">
+                          <span className="placeholder col-8"></span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+
+    </div>
+  )
+}
 
   return (
     <div className="container-fluid py-3">
